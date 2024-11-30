@@ -8,14 +8,52 @@
   it ends up being a lot more simple to implement.
 
 */
+function getDigit(number, place, longestNumber) {
+  let stringNumber = String(number); 
+  let digitIndex = stringNumber.length - 1 - place; 
+  if (digitIndex >= 0) {
+      return Number(stringNumber[digitIndex]);
+  } else {
+      return 0;
+  }
+}
 
-function radixSort(array) {
-  // code goes here
+function getLongestNumber(nums){
+  let stringNumbers = nums.map(num => String(num))
+  let longestNUmber = stringNumbers[0].length
+  for( let i = 0 ; i <stringNumbers.length ; i++ ){
+      if(stringNumbers[i].length > longestNUmber)
+      {
+          longestNUmber = stringNumbers[i].length
+      }
+  }
+  return longestNUmber
+}
+
+function radixSort(nums)
+{
+    let longestNUmber = getLongestNumber(nums)
+    for( let i =0 ; i <longestNUmber ; i++){
+        let buckets =Array.from({length : 10},() => [])
+        while(nums.length){
+            let num = nums.shift()
+            buckets[getDigit(num,i,longestNUmber)].push(num)
+        }
+        for(let j = 0 ; j<buckets.length; j++){
+            while(buckets[j].length)
+            {
+                nums.push(buckets[j].shift())
+
+            }
+        }
+    }
+    
+    return nums
 }
 
 // unit tests
 // do not modify the below code
-describe.skip("radix sort", function () {
+describe("radix sort", function () {
   it("should sort correctly", () => {
     const nums = [
       20,
