@@ -5,15 +5,36 @@
 
 function linearSearch(id, array) {
   // code goes here
+  for( let i =0 ; i < array.length ; i ++){
+    if(array[i].id === id){
+      return array[i]
+    }
+  }
+  return void 0;
 }
 
+
 function binarySearch(id, array) {
-  // code goes here
+  left = 0 ;
+  right = array.length-1 ;
+  while( left <= right ){
+    mid = Math.floor((left + right )/2)
+    if(array[mid].id === id){
+      return array[mid]
+    }
+    else if ( id < array[mid].id){
+      right = mid -1
+    }
+    else if( id > array[mid].id ){
+      left = mid + 1
+    }
+  }
+  return void 0;
 }
 
 // unit tests
 // do not modify the below code
-test.skip("linear search", function () {
+test("linear search", function () {
   const lookingFor = { id: 5, name: "Brian" };
   expect(
     linearSearch(5, [
@@ -35,7 +56,7 @@ test.skip("linear search", function () {
   ).toBe(lookingFor);
 });
 
-test.skip("binary search", function () {
+test("binary search", function () {
   const lookingFor = { id: 23, name: "Brian" };
   expect(
     binarySearch(23, [
