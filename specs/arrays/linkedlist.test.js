@@ -23,67 +23,91 @@
   you work
 */
 
+const { find } = require("lodash");
+
 class LinkedList {
-  constructor() {
+  constructor(){
     this.head = null;
     this.tail = null;
-    this.length = 0;
+    this.length =0;
   }
+
+
   push(value) {
     const node = new Node(value);
-    this.length++;
-    if (!this.head) {
-      this.head = node;
-    } else {
+    if(!this.head){
+      this.head = node
+    }
+    else{
       this.tail.next = node;
+
     }
     this.tail = node;
+    this.length += 1;
+
   }
-  pop() {
-    return this.delete(this.length - 1);
+  pop(){
+    if(!this.head){
+      return undefined
+    }
+    else{
+      return this.delete(this.length -1)
+    }
   }
   _find(index) {
-    if (index >= this.length) return null;
     let current = this.head;
-    for (let i = 0; i < index; i++) {
+    for(let counter = 0 ; counter < index ; counter ++){
       current = current.next;
     }
-
     return current;
   }
   get(index) {
-    const node = this._find(index);
-    if (!node) return void 0;
-    return node.value;
+    if( index >=0 && index < this.length){
+      return this._find(index).value;
+    }
+    return undefined;
   }
   delete(index) {
-    if (index === 0) {
-      const head = this.head;
-      if (head) {
-        this.head = head.next;
-      } else {
-        this.head = null;
-        this.tail = null;
-      }
-      this.length--;
-      return head.value;
+    let deletedValue ;
+    if(index < 0 || index >= this.length ){
+      return undefined;
     }
+    else{
+      // deleting the head
+      if(index === 0){
+        if(!this.head){
+          return undefined;
+        }
+        deletedValue = this.head.value;
+        this.head=this.head.next;
+      }
+      // deleting the tail
+      else if(index === this.length-1){
+        const previous = this._find(index-1);
+        deletedValue=this.tail.value;
+        this.tail=previous;
+        previous.next=null;
+      }
+      // deleting node other than the head ot the tail
+      else{
+        const previous = this._find(index-1)
+        const deletedNode = previous.next
+        deletedValue = deletedNode.value;
+        previous.next=deletedNode.next;
+      }
+    }
+    this.length -=1;
+    return deletedValue;
 
-    const node = this._find(index - 1);
-    const excise = node.next;
-    if (!excise) return null;
-    node.next = excise.next;
-    if (!node.next) this.tail = node.next;
-    this.length--;
-    return excise.value;
   }
 }
 
 class Node {
-  constructor(value) {
+  constructor(value){
     this.value = value;
-    this.next = null;
+    this.next=null;
   }
+
 }
 
 // unit tests
